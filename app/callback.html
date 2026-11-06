@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><title>TikTok sign-in · Curiosity Notes</title><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><style>body{font:17px/1.6 system-ui,sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem;color:#1b2a4a}a{color:#0a6}footer{margin-top:3rem;border-top:1px solid #ddd;padding-top:1rem;font-size:15px} textarea{width:100%;box-sizing:border-box;font:15px/1.4 ui-monospace,monospace;padding:.5rem}button{font:inherit;padding:.4rem 1rem}</style></head><body>
+<h1>TikTok sign-in</h1>
+<p id="message">Reading the answer from TikTok…</p>
+<div id="result" hidden>
+<p>Copy this text and paste it into the login script. It works once and expires soon.</p>
+<textarea id="answer" rows="5" readonly></textarea>
+<p><button id="copy" type="button">Copy</button></p>
+</div>
+<footer><a href="../index.html">Home</a> · <a href="../privacy.html">Privacy Policy</a> · <a href="../terms.html">Terms of Service</a> · Contact: curiositynotes@gmail.com</footer>
+<script>
+const params = new URLSearchParams(location.search);
+const message = document.getElementById("message");
+const code = params.get("code");
+if (code) {
+  message.textContent = "TikTok sign-in worked.";
+  document.getElementById("answer").value = JSON.stringify({ code, state: params.get("state") });
+  document.getElementById("result").hidden = false;
+  document.getElementById("copy").onclick = () => navigator.clipboard.writeText(document.getElementById("answer").value);
+  history.replaceState(null, "", location.pathname);
+} else if (params.get("error")) {
+  message.textContent = "TikTok did not finish the sign-in: " + (params.get("error_description") || params.get("error"));
+} else {
+  message.textContent = "This page finishes a TikTok sign-in. There is nothing to do here.";
+}
+</script></body></html>
